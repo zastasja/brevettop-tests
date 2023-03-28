@@ -1,7 +1,9 @@
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Keys
-# import Base
+from selenium.webdriver.support.wait import WebDriverWait
+from pages.Basepage import Basepage
+from selenium.webdriver.support import expected_conditions as EC
 
 # test data
 gmail = 'qa.testovna@gmail.com'
@@ -25,30 +27,28 @@ g_change_account = '//div[@class="BHzsHc"]'
 g_email_field = '//input[@type="email"]'
 g_pass_field = '//input[@type="password"]'
 
-
-
 def test_reg_bz(browser):
-    browser.get(login_url)
-    time.sleep(5)
+    page = Basepage(browser, login_url)
+    page.open_page()
+    time.sleep(3)
     browser.find_element(By.XPATH, bzlogin_btn).click()
-    time.sleep(5)
-    login = browser.find_element(By.XPATH, bzl_input)
-    login.send_keys(bzlogin)
-    bpass = browser.find_element(By.XPATH, bzp_input)
-    bpass.send_keys(bzpass)
+    time.sleep(3)
+    login = page.keyboard_input(By.XPATH, bzl_input, bzlogin)
+    bpass = page.keyboard_input(By.XPATH, bzp_input, bzpass)
     browser.find_element(By.XPATH, bz_btn_confirm).click()
-    time.sleep(5)
-    # logout = Base.element_is_present(By.XPATH, '//button[@class="mat-focus-indicator logout mat-raised-button mat-button-base"]')
-    # assert logout == True, 'Login не прошел'
+    pc = WebDriverWait(browser, 30).until(EC.element_to_be_clickable((By.XPATH, '//h2')))
+    assert pc.text == "Участник ??"
 
-def test_reg_google(browser):
-    browser.get(login_url)
-    time.sleep(5)
-    browser.find_element(By.XPATH, Google_btn).click()
-    time.sleep(5)
-    login = browser.find_element(By.XPATH, g_email_field)
-    login.send_keys(gmail)
-    login.send_keys(Keys.RETURN)
-    password = browser.find_element(By.XPATH, g_pass_field)
-    password.send_keys(gpass)
-    password.send_keys(Keys.RETURN)
+
+#
+# def test_reg_google(browser):
+#     browser.get(login_url)
+#     time.sleep(5)
+#     browser.find_element(By.XPATH, Google_btn).click()
+#     time.sleep(5)
+#     login = browser.find_element(By.XPATH, g_email_field)
+#     login.send_keys(gmail)
+#     login.send_keys(Keys.RETURN)
+#     password = browser.find_element(By.XPATH, g_pass_field)
+#     password.send_keys(gpass)
+#     password.send_keys(Keys.RETURN)
