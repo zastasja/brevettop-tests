@@ -70,7 +70,6 @@ def test_reg_email_new_user(browser):
     cart = page.element_is_present(By.XPATH, '//qrcode')
     assert cart == True
     page.click_element(By.XPATH, del_btn)
-    time.sleep(10)
 
 def test_reg_email_existed_user(browser):
     page = Basepage(browser, login_url)
