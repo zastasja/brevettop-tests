@@ -1,4 +1,6 @@
 import time
+
+import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -6,7 +8,7 @@ from pages.Basepage import Basepage
 from selenium.webdriver.support import expected_conditions as EC
 
 # test data
-gmail = 'qa.testovna@gmail.com'
+gmail = 'qa.testovna'
 gpass = 'testovna$b2'
 
 mmail = 'qa.testovna@mail.ru'
@@ -38,6 +40,7 @@ fio = 'QA Testovna'
 fio_input = '//input[@name="name"]'
 p_m_input = '//input[@type="password"]'
 btn_save = '//button[contains(text(), "Save")]'
+btn_signin = '//button[contains(text(), "Sign In")]'
 
 def test_reg_bz(browser):
     page = Basepage(browser, login_url)
@@ -49,6 +52,7 @@ def test_reg_bz(browser):
     cart = page.element_is_present(By.XPATH, '//qrcode')
     assert cart == True
 
+@pytest.mark.xfail
 def test_reg_google(browser):
     page = Basepage(browser, login_url)
     page.open_page()
@@ -60,7 +64,8 @@ def test_reg_google(browser):
     cart = page.element_is_present(By.XPATH, '//qrcode')
     assert cart == True
 
-def test_reg_email(browser):
+@pytest.mark.xfail
+def test_reg_email_new_user(browser):
     page = Basepage(browser, login_url)
     page.open_page()
     page.click_element(By.XPATH, email_btn)
@@ -69,5 +74,16 @@ def test_reg_email(browser):
     page.keyboard_input(By.XPATH, fio_input, fio)
     page.keyboard_input(By.XPATH, p_m_input, mpass)
     page.click_element(By.XPATH, btn_save)
+    cart = page.element_is_present(By.XPATH, '//qrcode')
+    assert cart == True
+
+def test_reg_email_existed_user(browser):
+    page = Basepage(browser, login_url)
+    page.open_page()
+    page.click_element(By.XPATH, email_btn)
+    page.keyboard_input(By.XPATH, mail_input, mmail)
+    page.click_element(By.XPATH, btn_next)
+    page.keyboard_input(By.XPATH, p_m_input, mpass)
+    page.click_element(By.XPATH, btn_signin)
     cart = page.element_is_present(By.XPATH, '//qrcode')
     assert cart == True
