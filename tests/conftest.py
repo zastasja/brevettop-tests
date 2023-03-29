@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def browser():
     options = webdriver.ChromeOptions()
     options.add_argument("--window-size=1600,1080")
